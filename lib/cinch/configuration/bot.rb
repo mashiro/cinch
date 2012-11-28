@@ -8,7 +8,8 @@ module Cinch
                       :realname, :user, :messages_per_second, :server_queue_size,
                       :strictness, :message_split_start, :message_split_end,
                       :max_messages, :plugins, :channels, :encoding, :reconnect, :max_reconnect_delay,
-                      :local_host, :timeouts, :ping_interval, :delay_joins, :dcc, :shared, :sasl]
+                      :local_host, :timeouts, :ping_interval, :delay_joins, :trap,
+                      :storage, :dcc, :shared, :sasl]
 
       # (see Configuration.default_config)
       def self.default_config
@@ -37,6 +38,7 @@ module Cinch
           :timeouts => Configuration::Timeouts.new,
           :ping_interval => 120,
           :delay_joins => 0,
+          :trap => true,
           :storage => Configuration::Storage.new,
           :dcc => Configuration::DCC.new,
           :sasl => Configuration::SASL.new,

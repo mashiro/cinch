@@ -228,6 +228,8 @@ module Cinch
       command   = message ? "QUIT :#{message}" : "QUIT"
 
       @irc.send command
+
+      stop
     end
 
     # Connects the bot to a server.
@@ -238,6 +240,11 @@ module Cinch
     def start(plugins = true)
       @reconnects = 0
       @plugins.register_plugins(@config.plugins.plugins) if plugins
+
+      if @config.trap
+        trap(:INT) { quit 'interrupt' }
+        trap(:QUIT) { quit 'quit' }
+      end
 
       begin
         @user_list.each do |user|
