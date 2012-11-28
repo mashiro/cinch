@@ -2,7 +2,8 @@ module Cinch
   # @note The interface of this class isn't fixed yet. You shouldn't
   #   use it yet.
   class Storage
-    include Enumerable
+    autoload :Null, 'cinch/storage/null'
+    autoload :YAML, 'cinch/storage/yaml'
 
     # @param [Hash] options
     # @param [Plugin] plugin
@@ -11,47 +12,35 @@ module Cinch
 
     # @param [Object] key
     # @return [Object, nil]
+    def get(key)
+      raise NotImprementError
+    end
+
     def [](key)
+      get key
     end
 
     # @param [Object] key
     # @param [Object] value
     # @return [value]
+    def set(key, value)
+      raise NotImprementError
+    end
+
     def []=(key, value)
-    end
-
-    # @return [self]
-    def each
-      self
-    end
-
-    # @return [self]
-    def each_key
-      self
-    end
-
-    # @return [self]
-    def each_value
-      self
+      set key, value
     end
 
     # @param [Object] key
     # @return [Boolean]
-    def has_key?(key)
-      false
+    def include?(key)
+      raise NotImprementError
     end
-    alias_method :include?, :has_key?
-    alias_method :key?, :has_key?
-    alias_method :member?, :has_key?
 
     # @param [Object] key
     # @return [Object, nil] The deleted object
     def delete(key)
-    end
-
-    # @return [self]
-    def delete_if
-      self
+      raise NotImprementError
     end
 
     def save

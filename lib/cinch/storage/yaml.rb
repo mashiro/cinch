@@ -20,63 +20,24 @@ module Cinch
       end
 
       # (see Storage#[])
-      def [](key)
+      def get(key)
         @yaml[key]
       end
 
       # (see Strage#[]=)
-      def []=(key, value)
+      def set=(key, value)
         @yaml[key] = value
       end
 
       # (see Storage#has_key?)
-      def has_key?(key)
-        @yaml.has_key?(key)
-      end
-      alias_method :include?, :has_key?
-      alias_method :key?, :has_key?
-      alias_method :member?, :has_key?
-
-      # (see Storage#each)
-      def each
-        @yaml.each {|e| yield(e)}
-
-        self
-      end
-
-      # (see Storage#each_key)
-      def each_key
-        @yaml.each_key {|e| yield(e)}
-
-        self
-      end
-
-      # (see Storage#each_value)
-      def each_value
-        @yaml.each_value {|e| yield(e)}
-
-        self
+      def include?(key)
+        @yaml.include?(key)
       end
 
       # (see Storage#delete)
       def delete(key)
         obj = @yaml.delete(key)
-
         obj
-      end
-
-      # (see Storage#delete_if)
-      def delete_if
-        delete_keys = []
-        each do |key, value|
-          delete_keys << key if yield(key, value)
-        end
-
-        delete_keys.each do |key|
-          delete(key)
-        end
-
-        self
       end
 
       # (see Storage#save)

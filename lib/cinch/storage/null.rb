@@ -7,6 +7,18 @@ module Cinch
     # This way, plugins will continue to work if programmed properly,
     # but no data will be preserved.
     class Null < Storage
+      def get(key)
+      end
+
+      def set(key, value)
+      end
+
+      def include?(key)
+        false
+      end
+
+      def delete(key)
+      end
     end
   end
 end
