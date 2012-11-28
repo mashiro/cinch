@@ -47,7 +47,7 @@ require "cinch/configuration/bot"
 require "cinch/configuration/plugins"
 require "cinch/configuration/ssl"
 require "cinch/configuration/timeouts"
-# require "cinch/configuration/storage"
+require "cinch/configuration/storage"
 require "cinch/configuration/dcc"
 require "cinch/configuration/sasl"
 
@@ -291,10 +291,10 @@ module Cinch
     end
 
     def stop
-      # @plugins.each do |plugin|
-      #   plugin.storage.save
-      #   plugin.storage.unload
-      # end
+      @plugins.each do |plugin|
+        plugin.storage.save
+        plugin.storage.unload
+      end
     end
 
     # @endgroup
