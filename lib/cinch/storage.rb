@@ -4,6 +4,7 @@ module Cinch
   class Storage
     autoload :Null, 'cinch/storage/null'
     autoload :YAML, 'cinch/storage/yaml'
+    autoload :SQLite3, 'cinch/storage/sqlite3'
 
     # @param [Hash] options
     # @param [Plugin] plugin
