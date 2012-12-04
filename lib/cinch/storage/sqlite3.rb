@@ -26,7 +26,7 @@ module Cinch
 
       def set(key, value)
         @db.execute "insert or replace into #{@table_name} values (?, ?)", key, serialize(value)
-        true
+        value
       end
 
       def include?(key)
