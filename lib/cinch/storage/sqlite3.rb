@@ -20,11 +20,13 @@ module Cinch
       end
 
       def get(key)
+        key = key.to_s if key.is_a? Symbol
         rows = @db.execute "select value from #{@table_name} where key = ? limit 1", key
         deserialize rows[0][0] if rows[0]
       end
 
       def set(key, value)
+        key = key.to_s if key.is_a? Symbol
         @db.execute "insert or replace into #{@table_name} values (?, ?)", key, serialize(value)
         value
       end
