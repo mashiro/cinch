@@ -362,11 +362,11 @@ module Cinch
     def on_away(msg, events)
       if msg.message.to_s.empty?
         # unaway
-        m.user.sync(:away, nil, true)
+        msg.user.sync(:away, nil, true)
         events << [:unaway]
       else
         # away
-        m.user.sync(:away, msg.message, true)
+        msg.user.sync(:away, msg.message, true)
         events << [:away]
       end
     end
@@ -480,7 +480,7 @@ module Cinch
         modes = ModeParser.parse_modes(msg.params[1], msg.params[2..-1])
         modes.each do |direction, mode, _|
           if direction == :add
-            @bot.modes << mode
+            @bot.modes << mode unless @bot.modes.include?(mode)
           else
             @bot.modes.delete(mode)
           end
@@ -544,15 +544,23 @@ module Cinch
       end
 
 
-      if msg.message =~ /^\001DCC SEND (?:"([^"]+)"|(\S+)) (\d+) (\d+)(?: (\d+))?\001$/
+      if msg.message =~ /^\001DCC SEND (?:"([^"]+)"|(\S+)) (\S+) (\d+)(?: (\d+))?\001$/
         process_dcc_send($1 || $2, $3, $4, $5, msg, events)
       end
     end
 
     # @since 2.0.0
     def process_dcc_send(filename, ip, port, size, m, events)
-      ip   = ip.to_i
-      ip   = [24, 16, 8, 0].collect {|b| (ip >> b) & 255}.join('.')
+      if ip =~ /^\d$/
+        # If ip is a single integer, assume it's a specification
+        # compliant IPv4 address in network byte order. If it's any
+        # other string, assume that it's a valid IPv4 or IPv6 address.
+        # If it's not valid, let someone higher up the chain notice
+        # that.
+        ip   = ip.to_i
+        ip   = [24, 16, 8, 0].collect {|b| (ip >> b) & 255}.join('.')
+      end
+
       port = port.to_i
       size = size.to_i
 
@@ -638,8 +646,8 @@ module Cinch
     def on_319(msg, events)
       # RPL_WHOISCHANNELS
       user     = User(msg.params[1])
-      channels = msg.params[2].scan(/#{@isupport["CHANTYPES"].join}[^ ]+/o).map {|c| Channel(c) }
-      user.sync(:channels, channels, true)
+      channels = msg.params[2].scan(/[#{@isupport["CHANTYPES"].join}][^ ]+/o).map {|c| Channel(c) }
+      @whois_updates[user].merge!({:channels => channels})
     end
 
     def on_324(msg, events)
